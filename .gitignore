@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Test outputs
+htmlcov/
+.coverage
+.cache
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Graphviz files
+*.dot
