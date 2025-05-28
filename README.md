@@ -128,7 +128,7 @@ FOLLOW(F) = { *, +, $, ) }
 after creating First and follow then by looking the data that we extract from first and follow functions we create 
 LL1 table, that we looks likes :
 
-![LL1 Table](LL1_table.png)  
+![LL1 Table](LL1_table.PNG)  
 
 > 🗺️ **How we create it**
 >
@@ -193,7 +193,7 @@ for using NetworkX and Pyvis we needed to run it on html so we decided use Flask
 we could use `Graphviz` too but the output was png and pdf and we wanted on html so we didn't use it and use the `Networkx` and `Pyvis` library that the output looks
 more beautiful in them :)
 
-![Graph picture](Tree.png)  
+![Graph picture](Tree.PNG)  
 
 > 🔗 **Graph Visualization Notebook**  
 > We built and rendered our Parse graph using this Colab workflow:  
