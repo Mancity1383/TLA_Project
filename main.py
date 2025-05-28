@@ -1,10 +1,9 @@
 
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string,jsonify
 from pyvis.network import Network
 import json
-import uuid
 from first_follow import first_follow
-from grammar.grammar_reader import GrammarReader
+from grammar.grammar_reader import GrammarReader,Grammar
 from table import ll1_table
 import dpda.dpda_and_tree as DPDA
 import matplotlib.pyplot as plt
@@ -20,12 +19,54 @@ import networkx as nx
     to create network and visualize out graph in html
 
 """
+G = nx.DiGraph()
+grammer = Grammar()
+
+#Find the main parent of the selected_node to start checking to down from that
+def check_parent(sent_node):
+    global G
+    my_node = dict()
+    for nodes,data in G.nodes(data=True):
+       if nodes == sent_node :
+          my_node = data
+    children_list = []
+
+    for node, data in G.nodes(data=True):
+        if "parent" in data and data["parent"] == sent_node:
+            children_list.append(node)
+
+    for item in children_list:
+        if G.nodes[item]['label'] in ['LEFT_PAR','LEFT_BRACE']:
+            return sent_node
+
+    if 'parent' not in my_node:
+        return None
+
+    return check_parent(my_node['parent'])
+     
+#Rename the label by finding node that has same label in same scope
+def change_the_label(sent_node,main_node,selected_label,choosen_label):
+    global G
+    if G.out_degree(sent_node) == 0 :
+        return
+    children_list = []
+    
+    for node, data in G.nodes(data=True):
+        if "parent" in data and data["parent"] == sent_node:
+            # if data['label'] == 'LEFT_PAR' and sent_node != main_node:
+            #     return
+            children_list.append(node)
+    for item in children_list:
+        change_the_label(item,main_node,selected_label,choosen_label)
+        if G.nodes[item]['label'] == selected_label:
+            print(G.nodes[item]['label'])
+            G.nodes[item]['label'] = choosen_label
+    
 
 app = Flask(__name__)
-
 @app.route("/")
 def index():
-    
+    global G,grammer
     #Get the grammer from txt file
     grammer = GrammarReader.load("x.txt")
     #Create first for every nonterminal to use in creating LL1 Table
@@ -127,30 +168,52 @@ def index():
             if T node is in Right part and E_prime node is in the left part of parent node by doing this we 
             changes theirs sides
         """
-        
         edges = list(G.edges())
         edges = edges[::-1]
         for source, target in edges:
             net.add_edge(source, target)
+            G.nodes[target]["parent"] = source
 
         html = net.generate_html()
 
-        #add click option to get data about the nodes that clicked by user with using JavaScipts
+        #add click option to get data about the nodes that clicked by user and get new_label data with using JavaScipts
         click_script = """
         <script type="text/javascript">
-        var network = window.network;
+        document.addEventListener("DOMContentLoaded", () => {
+        const network = window.network;
+
         network.on("click", function(params) {
-          if (params.nodes.length > 0) {
-            var nodeId = params.nodes[0];
-            var node = network.body.data.nodes.get(nodeId);
-            fetch("/node_click", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ label: node.label })
-            });
-          }
+        if (!params.nodes.length) return;
+        const node = network.body.data.nodes.get(params.nodes[0]);
+
+        const promptText = `
+        This is a new option just for you my little stupid
+        change whatever you like, now you change the "${node.label}"
+        then you try to change the world, now what name do you wana choose?
+        `.trim();
+
+        const newLabel = window.prompt(promptText, node.label);
+
+        if (newLabel === null) return;
+
+        fetch("/node_click", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+        id:        node.id,
+        label:     node.label,
+        new_label: newLabel
+        })
+        })
+        .then(res => res.json())
+        .then(data => {
+        network.body.data.nodes.update(data.changed || data);
+        })
+        .catch(console.error);
+        });
         });
         </script>
+
         """
         #add click option to html part
         page = html.replace("</body>", click_script + "\n</body>")
@@ -193,10 +256,23 @@ def index():
 
 @app.route("/node_click", methods=["POST"])
 def node_click():
-    #get data of reguest and then show it
+    global grammer
     data = request.get_json()
-    print("Clicked Node:", data.get("label"))
-    return ("", 204)
+    main_id = data["id"]
+    clicked_label = data["label"]
+    new_label= data["new_label"]
+    if(clicked_label) not in grammer.terminals and (clicked_label) not in grammer.nonterminals:
+      parent = check_parent(main_id)
+      change_the_label(parent,parent, clicked_label,new_label)
+
+      changed = []
+      for node, attrs in G.nodes(data=True):
+          changed.append({
+              "id":    node,
+              "label": attrs["label"]
+          })
+
+      return jsonify(changed=changed)
 
 if __name__ == "__main__":
     app.run(debug=True)

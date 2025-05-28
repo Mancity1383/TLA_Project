@@ -55,7 +55,7 @@ That includes `start-state`,`non-terminals`,`terminals`,`main-grammer` and `term
 store them in **Grammer** class by extracting each data by using **GrammarReader** class.
 
 > ℹ️ **Info**  
-> This classes are in grammer folder and in grammer_reader.py file.
+> These classes are in grammer folder and in grammer_reader.py file.
 
 ---
 
@@ -119,7 +119,7 @@ FOLLOW(F) = { *, +, $, ) }
 
 
 > ℹ️ **Info**  
-> This classes are in first_follow folder and in first_follow.py file.
+> These classes are in first_follow folder and in first_follow.py file.
 
 ---
 
@@ -146,7 +146,7 @@ LL1 table, that we looks likes :
 > 3. Return the filled table `M`.
 
 > ℹ️ **Info**  
-> This classes are in table folder and in ll1_table.py file.
+> These classes are in table folder and in ll1_table.py file.
 
 ---
 
