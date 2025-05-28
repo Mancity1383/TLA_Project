@@ -32,7 +32,7 @@ by Lexical and Parse analyis.
 
 ---
 
-### Get input and store grammer
+### 1.Get input and store grammer
 
 In this part we get the `grammer` from user that its format looks like :
 ```text
@@ -59,7 +59,7 @@ store them in **Grammer** class by extracting each data by using **GrammarReader
 
 ---
 
-### Create First and Follow
+### 2.Create First and Follow
 
 in this part we create First and Follow that is necesary for creating LL1 table.
 
@@ -123,7 +123,7 @@ FOLLOW(F) = { *, +, $, ) }
 
 ---
 
-### Create LL1 table
+### 3.Create LL1 table
 
 after creating First and follow then by looking the data that we extract from first and follow functions we create 
 LL1 table, that we looks likes :
@@ -150,7 +150,7 @@ LL1 table, that we looks likes :
 
 ---
 
-### Create DPDA
+### 4.Create DPDA
 
 **1.First Step : Create Transitions**
 
@@ -183,7 +183,7 @@ Validate a tokenized input sequence against an LL(1) parsing table, drive the pa
 
 ---
 
-### Using Flask
+### 5.Using Flask
 
 for using NetworkX and Pyvis we needed to run it on html so we decided use Flask to get more feature beside run on browser , like :
 
