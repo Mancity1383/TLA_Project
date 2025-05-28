@@ -35,7 +35,7 @@ by Lexical and Parse analyis.
 ### Get input and store grammer
 
 In this part we get the `grammer` from user that its format looks like :
-```http
+```text
 START = E
 NON_TERMINALS = E , E_prime , T , T_prime , F
 TERMINALS = IDENTIFIER , LITERAL , PLUS , STAR , LEFT_PAR , RIGHT_PAR
@@ -67,7 +67,7 @@ in this part we create First and Follow that is necesary for creating LL1 table.
 
 we compute first by using `compute_follow` function, the first have form likes :
 
-```http
+```text
 FIRST(E) = { id, ( }
 
 FIRST(E′) = { +, ε }
@@ -96,7 +96,7 @@ FIRST(F) = { id, ( }
 
 we compue follow by using `compute_follow` function, the follow have form likes :
 
-```http
+```text
 FOLLOW(E) = { $, ) }
 
 FOLLOW(E′) = { $, ) }
