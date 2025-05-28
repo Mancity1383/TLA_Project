@@ -1,7 +1,4 @@
-def build_ll1_table(grammar, first, follow):
-    # LL(1) parse table:
-    # key   = (Nonterminal, Terminal)
-    # value = RHS of the production A → α (as a list of symbols)
+def build_ll1_table(grammar, first, follow) -> dict:
     table = {}
 
     for A, productions in grammar.productions.items():
@@ -15,7 +12,7 @@ def build_ll1_table(grammar, first, follow):
                 first_alpha = set()
                 for symbol in production:
                     first_alpha |= (first[symbol] - {'eps'})
-                    if 'eps' not in first[symbol]:   #if eps it continues the loop.
+                    if 'eps' not in first[symbol]:
                         break
                 else:
                     first_alpha.add('eps')

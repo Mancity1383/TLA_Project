@@ -6,14 +6,8 @@ def compute_first(grammar):
     for symbol in grammar.terminals:
         first[symbol] = {symbol}
 
-
-
-
     for terminal in grammar.terminals:
         first[terminal].add(terminal)
-
-
-
 
     changed = True
     while changed:
