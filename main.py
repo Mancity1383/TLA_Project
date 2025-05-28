@@ -3,11 +3,10 @@ from flask import Flask, request, render_template_string
 from pyvis.network import Network
 import json
 import uuid
-from Grammer_Reader import GrammarReader
 from first_follow import first_follow
 from grammar.grammar_reader import GrammarReader
 from table import ll1_table
-import dpda_and_tree as DPDA
+import dpda.dpda_and_tree as DPDA
 import matplotlib.pyplot as plt
 import networkx as nx
 
