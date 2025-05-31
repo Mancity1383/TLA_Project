@@ -10,11 +10,11 @@ by Lexical and Parse analyis.
 ## Table of contents
 - [TLA project](#tla-project)
     - [Fetures](#fetures)
-        - [Get input and store grammer](#get-input-and-store-grammer)
-        - [Create First and Follow](#create-first-and-follow)
-        - [Create LL1 table](#create-ll1-table)
-        - [Create DPDA](#create-dpda)
-        - [Using Flask](#using-flask)
+        - [Get input and store grammer](#1get-input-and-store-grammerget-input-and-store-grammer)
+        - [Create First and Follow](#2create-first-and-follow)
+        - [Create LL1 table](#3create-ll1-table)
+        - [Create DPDA](#4create-dpda)
+        - [Using Flask](#5using-flask)
     - [Acknowledgements](#acknowledgements)
 
 
